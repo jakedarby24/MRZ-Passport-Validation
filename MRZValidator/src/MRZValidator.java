@@ -10,5 +10,7 @@ public class MRZValidator {
         .addObject(args)
         .build()
         .parse(argv);
+        
+        MRZ inputMRZ = new MRZ(args.mrz);   
     }
 }
