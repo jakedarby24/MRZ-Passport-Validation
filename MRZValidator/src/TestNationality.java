@@ -1,11 +1,9 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-
 import org.junit.*;
 
-// These unit tests check that the console output for the passport number checks is as expected.
+// These unit tests check that the console output for the nationality checks is as expected.
 public class TestNationality {
     
     // Initialise variables needed for testing
@@ -42,5 +40,26 @@ public class TestNationality {
         newArgs.nationality = "GBR";
         MRZValidator.validatePassport(newArgs, newMRZ);
         assertEquals(MRZValidator.TERMINAL_GREEN + "Passport MRZ is valid." + MRZValidator.TERMINAL_RESET + "\n", consoleOutput.toString());
+    }
+
+    @Test
+    public void testMRZShortNationality() {
+        newArgs.nationality = "G";
+        MRZValidator.validatePassport(newArgs, newMRZ);
+        assertEquals(MRZValidator.TERMINAL_RED + "MRZ validation failure" + MRZValidator.TERMINAL_RESET + ". Input nationality '" + newArgs.nationality + "' does not match nationality in MRZ '" + newMRZ.getNationality() + "'\n", consoleOutput.toString());
+    }
+
+    @Test
+    public void testMRZLongNationality() {
+        newArgs.nationality = "GBRGBRGBRGBRGBR";
+        MRZValidator.validatePassport(newArgs, newMRZ);
+        assertEquals(MRZValidator.TERMINAL_RED + "MRZ validation failure" + MRZValidator.TERMINAL_RESET + ". Input nationality '" + newArgs.nationality + "' does not match nationality in MRZ '" + newMRZ.getNationality() + "'\n", consoleOutput.toString());
+    }
+
+    @Test
+    public void testMRZNonAlphaNationality() {
+        newArgs.nationality = "71-|[=+``";
+        MRZValidator.validatePassport(newArgs, newMRZ);
+        assertEquals(MRZValidator.TERMINAL_RED + "MRZ validation failure" + MRZValidator.TERMINAL_RESET + ". Input nationality '" + newArgs.nationality + "' does not match nationality in MRZ '" + newMRZ.getNationality() + "'\n", consoleOutput.toString());
     }
 }

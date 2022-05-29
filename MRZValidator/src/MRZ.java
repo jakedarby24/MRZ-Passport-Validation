@@ -1,5 +1,7 @@
-// Custom datatype for holding all of the contents of the inputted MRZ
+// Custom class for holding all of the contents of the inputted MRZ
 public class MRZ {
+
+    // Class attributes
     private String passportNumber;
     private String passportNumberCheckDigit;
     private String nationality;
@@ -8,6 +10,7 @@ public class MRZ {
     private String expiryDate;
     private String expiryDateDigitCheck;
 
+    // Constructor
     public MRZ(String inputtedMRZ) {
         this.passportNumber = inputtedMRZ.substring(0, 9);
         this.passportNumberCheckDigit = inputtedMRZ.substring(9, 10);
@@ -18,6 +21,7 @@ public class MRZ {
         this.expiryDateDigitCheck = inputtedMRZ.substring(27, 28);
     }
 
+    // Getters
     public String getPassportNumber() {
         return passportNumber;
     }
@@ -40,6 +44,7 @@ public class MRZ {
         return expiryDateDigitCheck;
     }
 
+    // Overrides the toString() method to output each aspect of the MRZ in the terminal if a println() command is used.
     public String toString() {
         return "Passport number: " + passportNumber + "\n" +
                "Passport number check digit: " + passportNumberCheckDigit + "\n" +

@@ -5,6 +5,7 @@ import com.beust.jcommander.*;
 import java.util.*;
 
 public class Args {
+    // A list containing all of the parameters input
     @Parameter
     public List<String> parameters = new ArrayList<>();
 
