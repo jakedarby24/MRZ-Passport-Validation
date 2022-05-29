@@ -5,11 +5,15 @@ import com.beust.jcommander.JCommander;
 
 public class MRZValidator {
 
-    public static final String TERMINAL_RED = "\u001B[31m";
-    public static final String TERMINAL_GREEN = "\u001B[32m";
-    public static final String TERMINAL_RESET = "\u001B[0m";
+    // Colours for the terminal, if on macOS or Linux.
+    public static String TERMINAL_RED = "\u001B[31m";
+    public static String TERMINAL_GREEN = "\u001B[32m";
+    public static String TERMINAL_RESET = "\u001B[0m";
 
     public static void main(String[] argv) throws Exception {
+
+        setTerminalColours();
+
         Args args = new Args();
         JCommander.newBuilder()
         .addObject(args)
@@ -17,7 +21,6 @@ public class MRZValidator {
         .parse(argv);
         
         MRZ inputMRZ = new MRZ(args.mrz);
-
         validatePassport(args, inputMRZ);
     }
 
@@ -44,5 +47,16 @@ public class MRZValidator {
             System.out.println(TERMINAL_RED + "MRZ validation failure" + TERMINAL_RESET + ". Input expiry date '" + args.expiryDate + "' does not match expiry date in MRZ '" + inputMRZ.getExpiry() + "'");
         }
         return false;
+    }
+
+    // Colour support is not present in the Windows command prompt, whereas it is in Unix.
+    // If the operating system is Windows, 
+    public static void setTerminalColours() {
+        String operatingSystem = System.getProperty("os.name");
+        if (operatingSystem.equals("Windows 10") || operatingSystem.equals("Windows 11")) {
+            TERMINAL_GREEN = "";
+            TERMINAL_RED = "";
+            TERMINAL_RESET = "";
+        }
     }
 }
