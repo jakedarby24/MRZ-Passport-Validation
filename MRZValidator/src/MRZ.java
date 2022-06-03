@@ -3,29 +3,31 @@ public class MRZ {
 
     // Class attributes
     private String passportNumber;
-    private String passportNumberCheckDigit;
+    private int passportNumberCheckDigit;
     private String nationality;
     private String dateOfBirth;
-    private String dateOfBirthCheckDigit;
+    private int dateOfBirthCheckDigit;
     private String expiryDate;
-    private String expiryDateDigitCheck;
+    private int expiryDateCheckDigit;
+    private int fullCheckDigit;
 
     // Constructor
     public MRZ(String inputtedMRZ) {
         this.passportNumber = inputtedMRZ.substring(0, 9);
-        this.passportNumberCheckDigit = inputtedMRZ.substring(9, 10);
+        this.passportNumberCheckDigit = Integer.parseInt(inputtedMRZ.substring(9, 10));
         this.nationality = inputtedMRZ.substring(10, 13);
         this.dateOfBirth = inputtedMRZ.substring(13, 19);
-        this.dateOfBirthCheckDigit = inputtedMRZ.substring(19, 20);
+        this.dateOfBirthCheckDigit = Integer.parseInt(inputtedMRZ.substring(19, 20));
         this.expiryDate = inputtedMRZ.substring(21, 27);
-        this.expiryDateDigitCheck = inputtedMRZ.substring(27, 28);
+        this.expiryDateCheckDigit = Integer.parseInt(inputtedMRZ.substring(27, 28));
+        this.fullCheckDigit = Integer.parseInt(inputtedMRZ.substring(43, 44));
     }
 
     // Getters
     public String getPassportNumber() {
         return passportNumber;
     }
-    public String getPassportNumberCheckDigit() {
+    public int getPassportNumberCheckDigit() {
         return passportNumberCheckDigit;
     }
     public String getNationality() {
@@ -34,14 +36,17 @@ public class MRZ {
     public String getDOB() {
         return dateOfBirth;
     }
-    public String getDOBCheckDigit() {
+    public int getDOBCheckDigit() {
         return dateOfBirthCheckDigit;
     }
     public String getExpiry() {
         return expiryDate;
     }
-    public String getExpiryDigitCheck() {
-        return expiryDateDigitCheck;
+    public int getExpiryCheckDigit() {
+        return expiryDateCheckDigit;
+    }
+    public int getFullCheckDigit() {
+        return fullCheckDigit;
     }
 
     // Overrides the toString() method to output each aspect of the MRZ in the terminal if a println() command is used.
@@ -52,6 +57,7 @@ public class MRZ {
                "Date of birth: " + dateOfBirth + "\n" +
                "Date of birth check digit: " + dateOfBirthCheckDigit + "\n" +
                "Expiry date: " + expiryDate + "\n" +
-               "Expiry date check digit: " + expiryDateDigitCheck;
+               "Expiry date check digit: " + expiryDateCheckDigit + "\n" +
+               "Full Check Digit: " + fullCheckDigit;
     }
 }

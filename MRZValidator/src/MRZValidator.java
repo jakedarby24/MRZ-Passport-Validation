@@ -27,6 +27,26 @@ public class MRZValidator {
         validatePassport(args, inputMRZ);
     }
 
+    // Function for calculating the check digits of each part of the MRZ
+    public static int calculateCheckDigit(String input) {
+        int sum = 0;
+        int weight = 7;
+        for (int i = 0; i < input.length(); i++) {
+            String character = input.substring(i,i+1);
+            sum += Integer.parseInt(character) * weight;
+            if (weight == 7) {
+                weight = 3;
+            }
+            else if (weight == 3) {
+                weight = 1;
+            }
+            else {
+                weight = 7;
+            }
+        }
+        return sum % 10;
+    }
+
     // Function for checking that each part of the MRZ matches the input arguments
     public static boolean validatePassport(Args args, MRZ inputMRZ) {
 
@@ -36,8 +56,19 @@ public class MRZValidator {
         boolean dateOfBirthCorrect = args.dateOfBirth.equals(inputMRZ.getDOB());
         boolean expiryCorrect = args.expiryDate.equals(inputMRZ.getExpiry());
 
+        // Boolean values which check to make sure that the checksums hold for each part of the MRZ
+        int passportCheckDigit = calculateCheckDigit(args.passportNumber);
+        boolean passportChecksumCorrect = passportCheckDigit == (inputMRZ.getPassportNumberCheckDigit());
+        int dobCheckDigit = calculateCheckDigit(args.dateOfBirth);
+        boolean dobChecksumCorrect = dobCheckDigit == (inputMRZ.getDOBCheckDigit());
+        int expiryCheckDigit = calculateCheckDigit(args.expiryDate);
+        boolean expiryChecksumCorrect = expiryCheckDigit == (inputMRZ.getExpiryCheckDigit());
+        int completeChecksum = calculateCheckDigit(args.passportNumber + String.valueOf(passportCheckDigit) + args.dateOfBirth + String.valueOf(dobCheckDigit) + args.expiryDate + String.valueOf(expiryCheckDigit));
+        boolean completeChecksumCorrect = completeChecksum == (inputMRZ.getFullCheckDigit());
+
+
         // Checks that all of the conditions for validating an MRZ hold
-        if (passportNumberCorrect && nationalityCorrect && dateOfBirthCorrect && expiryCorrect) {
+        if (passportNumberCorrect && nationalityCorrect && dateOfBirthCorrect && expiryCorrect && passportChecksumCorrect && dobChecksumCorrect && expiryChecksumCorrect && completeChecksumCorrect) {
             System.out.println(TERMINAL_GREEN + "Passport MRZ is valid." + TERMINAL_RESET);
             return true;
         }
@@ -54,6 +85,18 @@ public class MRZValidator {
         }
         else if (!expiryCorrect) {
             System.out.println(TERMINAL_RED + "MRZ validation failure" + TERMINAL_RESET + ". Input expiry date '" + args.expiryDate + "' does not match expiry date in MRZ '" + inputMRZ.getExpiry() + "'");
+        }
+        else if (!passportChecksumCorrect) {
+            System.out.println(TERMINAL_RED + "MRZ validation failure" + TERMINAL_RESET + ". Passport number checksum value " + inputMRZ.getPassportNumberCheckDigit() + " does not match calculated checksum with value " + passportCheckDigit);
+        }
+        else if (!dobChecksumCorrect) {
+            System.out.println(TERMINAL_RED + "MRZ validation failure" + TERMINAL_RESET + ". Date of birth checksum value " + inputMRZ.getDOBCheckDigit() + " does not match calculated checksum with value " + dobCheckDigit);
+        }
+        else if (!expiryChecksumCorrect) {
+            System.out.println(TERMINAL_RED + "MRZ validation failure" + TERMINAL_RESET + ". Expiry date checksum value " + inputMRZ.getExpiryCheckDigit() + " does not match calculated checksum with value " + expiryCheckDigit);
+        }
+        else if (!completeChecksumCorrect) {
+            System.out.println(TERMINAL_RED + "MRZ validation failure" + TERMINAL_RESET + ". Final MRZ checksum value " + inputMRZ.getFullCheckDigit() + " does not match calculated checksum with value " + completeChecksum);
         }
         return false;
     }
