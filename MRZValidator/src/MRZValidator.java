@@ -36,11 +36,9 @@ public class MRZValidator {
             sum += Integer.parseInt(character) * weight;
             if (weight == 7) {
                 weight = 3;
-            }
-            else if (weight == 3) {
+            } else if (weight == 3) {
                 weight = 1;
-            }
-            else {
+            } else {
                 weight = 7;
             }
         }

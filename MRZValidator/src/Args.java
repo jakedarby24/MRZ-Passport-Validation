@@ -34,6 +34,7 @@ public class Args {
     public String issueState;
 
     // The inputted second line of the MRZ in the terminal
-    @Parameter(names = {"-mrz", "-mrzl2"}, description = "The second line of the MRZ", required = true)
+    @Parameter(names = {"-mrz", "-mrzl2"}, description = "The second line of the MRZ",
+    validateWith = MRZLengthValidation.class, required = true)
     public String mrz;
 }
